@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>The Story of My Heart 💔</title>
+<style>
+:root {
+  --pink: #ffb6c1;
+  --dark-1: #0a0a0a;
+  --dark-2: #1a1a1a;
+  --muted: #f2f2f2;
+}
+html,body { height:100%; margin:0; }
+body {
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background: linear-gradient(to bottom, var(--dark-1), var(--dark-2));
+  color: var(--muted);
+}
+.nav-wrap { padding:18px 10px; }
+button.nav-btn {
+    background-color: var(--pink);
+    color: #000;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 700;
+    margin: 8px;
+    transition: .22s ease;
+}
+button.nav-btn:hover { background-color: #fff; color:#111; transform: translateY(-3px); }
+.section { display:none; padding: 50px 20px; min-height: calc(100vh - 120px); position: relative; box-sizing: border-box; }
+.active { display:block; }
+h1,h2 { margin: 18px 0; }
+p { font-size: 1.15em; width: 80%; margin: 12px auto; line-height:1.5; }
+.quote { font-style: italic; color: #ffa8a8; margin-top: 18px; }
+#mascot { position: fixed; width: 52px; height: 52px; bottom: 20px; right: 20px; font-size: 28px; cursor: pointer; animation: bounce 2s infinite; display:flex; align-items:center; justify-content:center; user-select:none; }
+@keyframes bounce { 0%,100%{ transform: translateY(0);} 50% { transform: translateY(-12px);} }
+#love { background: linear-gradient(-45deg,#ff9a9e,#fad0c4,#fbc2eb,#a18cd1); background-size: 400% 400%; animation: gradientBG 15s ease infinite; color: white; }
+@keyframes gradientBG { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+.heart { position: absolute; width: 20px; height: 20px; background: red; clip-path: polygon(50% 0%,61% 15%,75% 15%,85% 25%,85% 40%,50% 100%,15% 40%,15% 25%,25% 15%,39% 15%); pointer-events:none; opacity: .95; will-change: transform; }
+@keyframes fall { 0% { transform: translateY(-50px) rotate(0deg); opacity:1; } 70% { opacity: 0.9; } 100% { transform: translateY(700px) rotate(360deg); opacity: 0; } }
+#motivation { background: linear-gradient(to right,#f7b733,#fc4a1a); color:#fff; }
+#sad { background: radial-gradient(circle at top,#0d0d0d,#1a1a1a); color:var(--muted); font-family: "Georgia", serif; line-height:1.7; }
+body.love { cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="24" font-size="24">❤</text></svg>') 16 16, auto; }
+body.motivation { cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="24" font-size="24">⭐</text></svg>') 16 16, auto; }
+body.sad { cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="32" width="32"><text y="24" font-size="24">💔</text></svg>') 16 16, auto; }
+#messageBox { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); background: var(--pink); color: #111; padding: 10px 18px; border-radius: 10px; display: none; font-weight: 700; z-index: 9999; box-shadow: 0 6px 18px rgba(0,0,0,0.25); }
+@media (max-width:640px){ p { width: 92%; font-size:1.05em; } button.nav-btn { padding:8px 14px; font-size:0.95em; } }
+.control-btn { margin-top:12px; padding:8px 16px; border-radius:10px; border: none; cursor:pointer; font-weight:600; }
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+  <button class="nav-btn" onclick="showSection('home')">Home</button>
+  <button class="nav-btn" onclick="showSection('love')">Love</button>
+  <button class="nav-btn" onclick="showSection('motivation')">Motivation</button>
+  <button class="nav-btn" onclick="showSection('sad')">Sad</button>
+</div>
+
+<div id="home" class="section active">
+  <h1>💫 The Story of My Heart 💫</h1>
+  <p>There once lived a boy named <b>Nishantu</b> — quiet, emotional, yet full of unspoken words...</p>
+  <p class="quote">“Even if no one remembers my story, I’ll remember how it felt to be real.”</p>
+  <button class="control-btn" onclick="showMessage('Every pain teaches something beautiful 💫')">Click to Feel</button>
+</div>
+
+<div id="love" class="section">
+  <h1>Feel the Love ❤</h1>
+  <p>Love makes everything more beautiful.</p>
+  <button class="control-btn" onclick="toggleSectionMusic('love')">🎵 Play/Pause Love Music</button>
+  <button class="control-btn" onclick="stopAllMusic()">⏹ Stop All</button>
+  <div id="loveGameContainer"></div>
+  <div id="lovePollContainer"></div>
+</div>
+
+<div id="motivation" class="section">
+  <h1>Stay Motivated!</h1>
+  <p>Push yourself, because no one else is going to do it for you.</p>
+  <button class="control-btn" onclick="toggleSectionMusic('motivation')">🎵 Play/Pause Motivation Music</button>
+  <button class="control-btn" onclick="stopAllMusic()">⏹ Stop All</button>
+  <div id="motivationGameContainer"></div>
+  <div id="motivationPollContainer"></div>
+</div>
+
+<div id="sad" class="section">
+  <h2>💔 The Pain of Letting Go</h2>
+  <p>Some stories don’t end with goodbye — they just fade away, quietly.</p>
+  <button class="control-btn" onclick="toggleSectionMusic('sad')">🎵 Play/Pause Sad Music</button>
+  <button class="control-btn" onclick="stopAllMusic()">⏹ Stop All</button>
+  <div id="sadGameContainer"></div>
+  <div id="sadPollContainer"></div>
+</div>
+
+<div id="mascot" title="Click me for a message!">💖</div>
+<div id="messageBox"></div>
+
+<audio id="loveMusic" preload="none" src="C:\Users\rakhi\Downloads\love-romantic-hopeful-music-333017.mp3"></audio>
+<audio id="motivationMusic" preload="none" src="C:\Users\rakhi\Downloads\motivation-motivational-background-music-388288.mp3"></audio>
+<audio id="sadMusic" preload="none" src="C:\Users\rakhi\Downloads\sad-documentary-music-background-384728.mp3"></audio>
+
+<script>
+const sections = document.querySelectorAll('.section');
+const messageBox = document.getElementById('messageBox');
+const mascot = document.getElementById('mascot');
+const tracks = { love: document.getElementById('loveMusic'), motivation: document.getElementById('motivationMusic'), sad: document.getElementById('sadMusic') };
+
+Object.values(tracks).forEach(t => { t.addEventListener('error', () => showMessage('Missing audio in music folder.')); });
+
+function showSection(id){
+  sections.forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.body.className = id;
+  pauseAllExcept(id);
+  showMessage('Switched to '+id+' ❤️');
+}
+
+function pauseAllExcept(keepId){
+  for(const k in tracks){ if(k!==keepId){ tracks[k].pause(); tracks[k].currentTime=0; } }
+}
+
+function stopAllMusic(){
+  for(const k in tracks){ tracks[k].pause(); tracks[k].currentTime=0; }
+  showMessage('Stopped all music ⏹');
+}
+
+function toggleSectionMusic(type){
+  const t = tracks[type];
+  if(!t) return showMessage('No track for '+type);
+  if(t.paused){ pauseAllExcept(type); t.play().then(()=>showMessage(type+' music playing 🎶')).catch(()=>showMessage('Click again to play.')); }
+  else{ t.pause(); t.currentTime=0; showMessage(type+' music paused ⏸'); }
+}
+
+function showMessage(text,ms=2200){
+  messageBox.textContent=text;
+  messageBox.style.display='block';
+  clearTimeout(messageBox.timer);
+  messageBox.timer=setTimeout(()=>messageBox.style.display='none',ms);
+}
+
+mascot.addEventListener('click',()=>showMessage('Keep shining Nishantu 💫'));
+
+function createHeart(){
+  const loveSection=document.getElementById('love');
+  if(!loveSection.classList.contains('active')) return;
+  const heart=document.createElement('div');
+  heart.className='heart';
+  heart.style.left=Math.random()*(window.innerWidth-40)+'px';
+  const dur=(4+Math.random()*4).toFixed(2)+'s';
+  heart.style.animation=`fall ${dur} linear forwards`;
+  heart.style.opacity=(0.95-Math.random()*0.25).toFixed(2);
+  loveSection.appendChild(heart);
+  setTimeout(()=>heart.remove(),parseFloat(dur)*1000+200);
+}
+setInterval(createHeart,600);
+
+// === Mini-game: Guess Emotion ===
+const guessEmotions = [
+  'Happy', 'Sad', 'Angry', 'Excited', 'Bored', 'Curious', 'Surprised', 'Scared', 'Confused', 'Calm',
+  'Frustrated', 'Joyful', 'Lonely', 'Hopeful', 'Shy', 'Proud', 'Embarrassed', 'Relaxed', 'Anxious', 'Confident',
+  'Tired', 'Jealous', 'Determined', 'Grateful', 'Playful', 'Nostalgic', 'Euphoric', 'Guilty', 'Restless', 'Energetic'
+  // You can expand to 100+ questions here
+];
+
+function startGuessEmotion(containerId){
+  const container = document.getElementById(containerId);
+  let idx = Math.floor(Math.random()*guessEmotions.length);
+  container.innerHTML = `<p>Guess the emotion: <b>${guessEmotions[idx]}</b></p>`;
+}
+
+startGuessEmotion('loveGameContainer');
+startGuessEmotion('motivationGameContainer');
+startGuessEmotion('sadGameContainer');
+
+// === Poll example ===
+function showPoll(containerId, question, options){
+  const container = document.getElementById(containerId);
+  let html = `<p>${question}</p>`;
+  options.forEach((opt,i)=>{
+    html += `<button class='control-btn' onclick='votePoll("${containerId}", ${i})'>${opt}</button>`;
+  });
+  container.innerHTML = html;
+}
+
+let pollResults = {};
+function votePoll(containerId,optIndex){
+  if(!pollResults[containerId]) pollResults[containerId] = [];
+  pollResults[containerId][optIndex] = (pollResults[containerId][optIndex]||0)+1;
+  showMessage('Vote recorded ✅');
+}
+
+showPoll('lovePollContainer','Which love vibe do you prefer?',['Romantic','Friendly','Self-Love']);
+showPoll('motivationPollContainer','Your motivation style?',['Music','Quotes','Exercise']);
+showPoll('sadPollContainer','How do you cope with sadness?',['Cry','Write','Talk to Friend']);
+
+// === Short poetic generator ===
+const shortPoems = [
+  'Hearts whisper softly, even in silence.',
+  'Tears fall but stars still shine.',
+  'Love leaves footprints on the soul.',
+  'Dreams flicker like candlelight.',
+  'Pain shapes the wings of hope.'
+];
+function generatePoem(){
+  const idx = Math.floor(Math.random()*shortPoems.length);
+  showMessage(shortPoems[idx],3000);
+}
+</script>
+</body>
+</html>

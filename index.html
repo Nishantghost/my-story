@@ -102,6 +102,7 @@ body.sad { cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/sv
 <div id="mascot" title="Click me for a message!">💖</div>
 <div id="messageBox"></div>
 
+<!-- 🎵 Correct relative paths -->
 <audio id="loveMusic" preload="none" src="music/love-romantic-hopeful-music-333017.mp3"></audio>
 <audio id="motivationMusic" preload="none" src="music/motivation-motivational-background-music-388288.mp3"></audio>
 <audio id="sadMusic" preload="none" src="music/sad-documentary-music-background-384728.mp3"></audio>
@@ -110,7 +111,11 @@ body.sad { cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/sv
 const sections = document.querySelectorAll('.section');
 const messageBox = document.getElementById('messageBox');
 const mascot = document.getElementById('mascot');
-const tracks = { love: document.getElementById('loveMusic'), motivation: document.getElementById('motivationMusic'), sad: document.getElementById('sadMusic') };
+const tracks = { 
+  love: document.getElementById('loveMusic'), 
+  motivation: document.getElementById('motivationMusic'), 
+  sad: document.getElementById('sadMusic') 
+};
 
 Object.values(tracks).forEach(t => { t.addEventListener('error', () => showMessage('Missing audio in music folder.')); });
 
@@ -147,6 +152,7 @@ function showMessage(text,ms=2200){
 
 mascot.addEventListener('click',()=>showMessage('Keep shining Nishantu 💫'));
 
+// 💖 Heart animation in Love section
 function createHeart(){
   const loveSection=document.getElementById('love');
   if(!loveSection.classList.contains('active')) return;
@@ -163,18 +169,15 @@ setInterval(createHeart,600);
 
 // === Mini-game: Guess Emotion ===
 const guessEmotions = [
-  'Happy', 'Sad', 'Angry', 'Excited', 'Bored', 'Curious', 'Surprised', 'Scared', 'Confused', 'Calm',
-  'Frustrated', 'Joyful', 'Lonely', 'Hopeful', 'Shy', 'Proud', 'Embarrassed', 'Relaxed', 'Anxious', 'Confident',
-  'Tired', 'Jealous', 'Determined', 'Grateful', 'Playful', 'Nostalgic', 'Euphoric', 'Guilty', 'Restless', 'Energetic'
-  // You can expand to 100+ questions here
+  'Happy','Sad','Angry','Excited','Bored','Curious','Surprised','Scared','Confused','Calm',
+  'Frustrated','Joyful','Lonely','Hopeful','Shy','Proud','Embarrassed','Relaxed','Anxious','Confident',
+  'Tired','Jealous','Determined','Grateful','Playful','Nostalgic','Euphoric','Guilty','Restless','Energetic'
 ];
-
 function startGuessEmotion(containerId){
   const container = document.getElementById(containerId);
   let idx = Math.floor(Math.random()*guessEmotions.length);
   container.innerHTML = `<p>Guess the emotion: <b>${guessEmotions[idx]}</b></p>`;
 }
-
 startGuessEmotion('loveGameContainer');
 startGuessEmotion('motivationGameContainer');
 startGuessEmotion('sadGameContainer');
@@ -188,14 +191,12 @@ function showPoll(containerId, question, options){
   });
   container.innerHTML = html;
 }
-
 let pollResults = {};
 function votePoll(containerId,optIndex){
   if(!pollResults[containerId]) pollResults[containerId] = [];
   pollResults[containerId][optIndex] = (pollResults[containerId][optIndex]||0)+1;
   showMessage('Vote recorded ✅');
 }
-
 showPoll('lovePollContainer','Which love vibe do you prefer?',['Romantic','Friendly','Self-Love']);
 showPoll('motivationPollContainer','Your motivation style?',['Music','Quotes','Exercise']);
 showPoll('sadPollContainer','How do you cope with sadness?',['Cry','Write','Talk to Friend']);
@@ -215,4 +216,5 @@ function generatePoem(){
 </script>
 </body>
 </html>
+
 

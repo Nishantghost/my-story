@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fun & Productive Hub 💫</title>
+<style>
+:root {
+  --pink: #ffb6c1;
+  --blue: #6ab7ff;
+  --yellow: #f7d060;
+  --green: #90ee90;
+  --dark1: #0d0d0d;
+  --dark2: #1a1a1a;
+  --muted: #f2f2f2;
+}
+html, body { height: 100%; margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(to bottom, var(--dark1), var(--dark2)); color: var(--muted); text-align: center; overflow-x: hidden;}
+.nav-wrap { padding: 18px; }
+button.nav-btn {
+  background-color: var(--pink); color: #000; border: none; padding: 10px 20px; border-radius: 12px; margin: 5px; cursor: pointer; font-weight: 700; transition: 0.22s;
+}
+button.nav-btn:hover { background-color: #fff; color: #111; transform: translateY(-3px);}
+.section { display: none; padding: 40px 20px; min-height: calc(100vh - 120px); position: relative;}
+.active { display: block;}
+h1,h2 { margin: 18px 0;}
+p { width: 80%; margin: 12px auto; line-height: 1.5;}
+.control-btn { margin: 8px; padding: 8px 16px; border-radius: 10px; border: none; cursor:pointer; font-weight:600; transition:0.2s;}
+.control-btn:hover { transform: translateY(-2px);}
+#mascot { position: fixed; width: 52px; height: 52px; bottom: 20px; right: 20px; font-size: 28px; cursor: pointer; animation: bounce 2s infinite; display:flex; align-items:center; justify-content:center; user-select:none;}
+@keyframes bounce { 0%,100%{ transform: translateY(0);} 50% { transform: translateY(-12px); } }
+.ball { position: absolute; border-radius: 50%; }
+#messageBox { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); background: var(--pink); color:#111; padding: 10px 18px; border-radius: 10px; display:none; font-weight:700; z-index:9999;}
+</style>
+</head>
+<body>
+
+<div class="nav-wrap">
+  <button class="nav-btn" onclick="showSection('home')">Home</button>
+  <button class="nav-btn" onclick="showSection('poems')">Poems & Quotes</button>
+  <button class="nav-btn" onclick="showSection('productivity')">Productivity</button>
+  <button class="nav-btn" onclick="showSection('games')">Games & Fun</button>
+  <button class="nav-btn" onclick="showSection('polls')">Polls</button>
+</div>
+
+<div id="home" class="section active">
+  <h1>💫 Welcome to Fun & Productive Hub 💫</h1>
+  <p>This is your all-in-one space to relax, play, and stay productive. Click around to discover tools, games, short poems, polls, and more!</p>
+  <button class="control-btn" onclick="showMessage('Have fun and stay creative! 💖')">Click Me</button>
+</div>
+
+<div id="poems" class="section">
+  <h1>Short Poems & Quotes ✨</h1>
+  <p id="poemDisplay">Click below to generate a new poem or quote:</p>
+  <button class="control-btn" onclick="generatePoem()">Generate Poem</button>
+</div>
+
+<div id="productivity" class="section">
+  <h1>Productivity Tools 🛠️</h1>
+  <h2>Quick Timer ⏱️</h2>
+  <input type="number" id="timerInput" placeholder="Minutes" min="1" style="padding:6px; width:80px;">
+  <button class="control-btn" onclick="startTimer()">Start Timer</button>
+  <p id="timerDisplay"></p>
+  
+  <h2>To-Do List ✅</h2>
+  <input type="text" id="todoInput" placeholder="Add task..." style="padding:6px; width:150px;">
+  <button class="control-btn" onclick="addTodo()">Add</button>
+  <ul id="todoList" style="list-style:none; padding:0;"></ul>
+</div>
+
+<div id="games" class="section">
+  <h1>Games & Fun 🎉</h1>
+  <h2>Guess the Emotion 😄😢</h2>
+  <p id="emotionDisplay">Click to guess!</p>
+  <button class="control-btn" onclick="guessEmotion()">Next Emotion</button>
+  
+  <h2>Random Fun Tools 🎲</h2>
+  <button class="control-btn" onclick="rollDice()">Roll Dice 🎲</button>
+  <button class="control-btn" onclick="flipCoin()">Flip Coin 🪙</button>
+  <button class="control-btn" onclick="dailyChallenge()">Daily Challenge 🔥</button>
+  <p id="randomResult"></p>
+</div>
+
+<div id="polls" class="section">
+  <h1>Polls 📊</h1>
+  <p>Which activity do you like most?</p>
+  <button class="control-btn" onclick="votePoll(0)">Poems</button>
+  <button class="control-btn" onclick="votePoll(1)">Games</button>
+  <button class="control-btn" onclick="votePoll(2)">Productivity Tools</button>
+  <p id="pollResult"></p>
+</div>
+
+<div id="mascot" title="Click me for a message!">💖</div>
+<div id="messageBox"></div>
+
+<script>
+// === Sections ===
+const sections = document.querySelectorAll('.section');
+function showSection(id){
+  sections.forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// === Mascot message ===
+const messageBox = document.getElementById('messageBox');
+const mascot = document.getElementById('mascot');
+mascot.addEventListener('click',()=>showMessage('You are awesome, Nishantu! 💫'));
+function showMessage(msg, ms=2500){
+  messageBox.textContent = msg;
+  messageBox.style.display='block';
+  clearTimeout(messageBox.timer);
+  messageBox.timer=setTimeout(()=>messageBox.style.display='none', ms);
+}
+
+// === Balls animation ===
+function createBall(){
+  const ball = document.createElement('div');
+  ball.className='ball';
+  ball.style.width=ball.style.height= (20 + Math.random()*30)+'px';
+  ball.style.background = `hsl(${Math.random()*360},70%,60%)`;
+  ball.style.left = Math.random()*(window.innerWidth-50)+'px';
+  ball.style.top = Math.random()*window.innerHeight+'px';
+  ball.style.opacity = 0.8;
+  document.body.appendChild(ball);
+  setTimeout(()=>ball.remove(), 5000);
+}
+setInterval(createBall, 400);
+
+// === Poems ===
+const poems = [
+  'Hearts whisper softly, even in silence.',
+  'Tears fall but stars still shine.',
+  'Love leaves footprints on the soul.',
+  'Dreams flicker like candlelight.',
+  'Pain shapes the wings of hope.',
+  'Joy blooms in tiny moments.',
+  'Courage rises with every fall.',
+  'Kindness is the language of the heart.',
+  'Embrace the chaos, dance in the rain.',
+  'Happiness hides in simple things.',
+  'Your story is your power.',
+  'Hope glows even in darkness.',
+  'Smile, it’s your secret superpower.',
+  'Stars can’t shine without darkness.'
+];
+function generatePoem(){
+  const idx = Math.floor(Math.random()*poems.length);
+  document.getElementById('poemDisplay').textContent = poems[idx];
+}
+
+// === Timer ===
+let timerInterval;
+function startTimer(){
+  clearInterval(timerInterval);
+  let mins = parseInt(document.getElementById('timerInput').value);
+  if(isNaN(mins) || mins<=0){ showMessage('Enter valid minutes!'); return; }
+  let sec = mins*60;
+  timerInterval = setInterval(()=>{
+    let m = Math.floor(sec/60);
+    let s = sec%60;
+    document.getElementById('timerDisplay').textContent = `${m}m ${s}s`;
+    sec--;
+    if(sec<0){ clearInterval(timerInterval); showMessage('⏰ Time up!'); }
+  },1000);
+}
+
+// === To-Do List ===
+function addTodo(){
+  const input = document.getElementById('todoInput');
+  const val = input.value.trim();
+  if(!val){ showMessage('Enter a task!'); return;}
+  const li = document.createElement('li');
+  li.textContent = val;
+  li.style.cursor = 'pointer';
+  li.onclick = ()=>li.remove();
+  document.getElementById('todoList').appendChild(li);
+  input.value='';
+}
+
+// === Guess Emotion ===
+const emotions = ['Happy','Sad','Angry','Excited','Bored','Curious','Surprised','Scared','Confused','Calm','Frustrated','Joyful','Lonely','Hopeful','Shy','Proud','Embarrassed','Relaxed','Anxious','Confident'];
+function guessEmotion(){
+  const idx = Math.floor(Math.random()*emotions.length);
+  document.getElementById('emotionDisplay').textContent = 'Guess the emotion: '+emotions[idx];
+}
+
+// === Random Fun Tools ===
+function rollDice(){ showResult('You rolled a '+(1+Math.floor(Math.random()*6))+' 🎲'); }
+function flipCoin(){ showResult(Math.random()<0.5?'Heads 🪙':'Tails 🪙'); }
+function dailyChallenge(){
+  const challenges = ['Write a poem','Do 10 pushups','Smile at someone','Meditate 5 min','Draw something','Compliment a friend','Read 5 pages','Dance 2 min'];
+  showResult(challenges[Math.floor(Math.random()*challenges.length)]+' 🔥');
+}
+function showResult(text){ document.getElementById('randomResult').textContent=text; }
+
+// === Polls ===
+let pollCounts=[0,0,0];
+function votePoll(i){ pollCounts[i]++; showPollResult(); }
+function showPollResult(){
+  document.getElementById('pollResult').textContent=`Poems: ${pollCounts[0]} | Games: ${pollCounts[1]} | Productivity Tools: ${pollCounts[2]}`;
+}
+</script>
+</body>
+</html>
